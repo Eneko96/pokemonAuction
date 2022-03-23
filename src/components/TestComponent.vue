@@ -4,10 +4,21 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
     return Math.round(Math.random() * (155 -0) + 0)
   }
 
+  const fetchNewData = () => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber()}`)
+      .then(res => res.json())
+      .then(res => { 
+        console.log(res)
+        return data = res
+      })
+      .catch(err => {return { error: err }})
+  }
+
   export default {
     data() {
       return {
-        count: 0
+        count: 0,
+        lastVoted: null
       }
     },
     methods: {
@@ -16,6 +27,9 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
       },
       decrement() {
         this.count--
+      },
+      setVote(voted) {
+        this.lastVoted = voted
       }
     },
     setup() {
@@ -40,11 +54,19 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
           })
           .catch(err => error2.value = err)
       }
+
+      function refetch() {
+        console.log(this.lastVoted)
+        console.log('hola bebe')
+      }
+
       onMounted(() => {
         fetchData()
       })
 
       return {
+        fetchData,
+        refetch,
         data,
         data2,
         error,
@@ -63,14 +85,15 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
       <h1>Select one of them</h1>
       <div class="auctionContainer">
         <div class="pokemonContainer">
-          <img :src="data?.sprites.front_default" />
+          <img :src="data?.sprites.front_default" v-on:click="refetch" />
           <p>{{data?.name}}</p>
         </div>
-        <div class="pokemonContainer">
+        <div class="pokemonContainer" v-on:click="fetchData">
           <img :src="data2?.sprites.front_default" />
           <p>{{data2?.name}}</p>
         </div>
       </div>
+      <h2 v-if="lastVoted">You've voted {{lastVoted}}</h2>
   </div>
 </template>
 
