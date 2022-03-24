@@ -21,6 +21,7 @@ import StatList from "./StatList.vue";
     },
     setup() {
         const data = ref(null);
+        const arrayVoted = ref([]);
         const error = ref(null);
         const data2 = ref(null);
         const error2 = ref(null);
@@ -37,14 +38,15 @@ import StatList from "./StatList.vue";
             fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber()}`)
                 .then(res => res.json())
                 .then(res => {
-                console.log(res)
                 data2.value = res;
             })
                 .catch(err => error2.value = err);
             loading.value = false;
         }
         function refetch(last) {
+          console.log(arrayVoted.value)
             lastVoted.value = last;
+            arrayVoted.value.push(last)
             fetchData();
         }
         function nullLast() {
@@ -62,7 +64,8 @@ import StatList from "./StatList.vue";
             error,
             error2,
             lastVoted,
-            loading
+            loading,
+            arrayVoted
         };
     },
     mounted() {
@@ -104,6 +107,12 @@ import StatList from "./StatList.vue";
           </Transition>
         </div>
       </div>
+      <div v-if="arrayVoted && !lastVoted" style="margin-top: 10rem; flex-wrap: wrap; overflow-x: auto;">
+        <div v-for="pok in arrayVoted" style="display: flex; flex-direction: column;">
+          <img :src="pok.sprites.front_default" />
+          <p style="color: black; margin: 0;">{{pok.name}}</p> 
+        </div>
+      </div>
       <button v-if="lastVoted" v-on:click="nullLast" type="button">Continue</button>
       <!-- <section><h2 v-if="lastVoted">You've voted:</h2><h2 class="voted">{{ lastVoted }}</h2></section> -->
   </div>
@@ -112,6 +121,7 @@ import StatList from "./StatList.vue";
 <style scoped>
 
 .boxContainer {
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,6 +200,7 @@ button {
   .resultContainer {
     flex-direction: column;
   }
+
 }
 
 </style>

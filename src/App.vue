@@ -22,4 +22,14 @@ import TestComponent from './components/TestComponent.vue';
   color: #2c3e50;
 }
 
+body {
+  overflow: hidden;
+}
+
+@media screen and (max-width: 400px) {
+  body {
+    overflow: auto;
+  }
+}
+
 </style>
