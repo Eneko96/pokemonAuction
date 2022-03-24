@@ -14,8 +14,16 @@ export default {
 
 <template>
 <ul>
-  <li v-for="stat in stats">
-    {{stat.base_stat}}
+  <li v-for="stat in stats" style="display: flex;">
+    <p style="font-weight: bold;">{{stat.stat.name}}:</p><p>{{stat.base_stat}}</p>
   </li>
 </ul>
 </template>
+
+<style>
+ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+</style>
