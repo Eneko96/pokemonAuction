@@ -1,8 +1,13 @@
-# pokemonAuction
-# Vue 3 + Vite
+# POKEMON AUCTION
+# Done with Vue 3
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+My first project with Vue, aplying simple components and data fetching in 
+order to start learning how is the framework paradigm
 
-## Recommended IDE Setup
+Basic functionality:
+- Select Pokemon within two options
+- Once selected, see some information of the pokemon and selection rate
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+![First page](src/assets/first_page.png)
+
+[My Github](https://github.com/Eneko96)
