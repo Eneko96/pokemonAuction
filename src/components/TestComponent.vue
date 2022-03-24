@@ -1,3 +1,6 @@
+<script setup>
+import StatList from './StatList.vue'
+</script>
 <script>
 import {ref, onMounted } from "@vue/runtime-dom";
   const randomNumber = () => {
@@ -50,6 +53,10 @@ import {ref, onMounted } from "@vue/runtime-dom";
         fetchData()
       }
 
+      function nullLast() {
+        lastVoted.value = null
+      }
+
       onMounted(() => {
         fetchData()
       })
@@ -57,6 +64,7 @@ import {ref, onMounted } from "@vue/runtime-dom";
       return {
         fetchData,
         refetch,
+        nullLast,
         data,
         data2,
         error,
@@ -74,16 +82,16 @@ import {ref, onMounted } from "@vue/runtime-dom";
 
 <template>
   <div class="boxContainer">
-      <h1>Select one of them</h1>
-      <div class="auctionContainer">
-        <div v-if="!loading" class="pokemonContainer">
-          <img :src="data?.sprites.front_default" v-on:click="() => refetch(data?.name)" />
+      <h1 v-if="!lastVoted">Select one of them</h1>
+      <div v-if="!lastVoted" class="auctionContainer">
+        <div v-if="!loading" class="pokemonContainer" v-on:click="() => refetch(data)">
+          <img :src="data?.sprites.front_default" />
           <p>{{data?.name}}</p>
         </div>
         <div v-else class="pokemonContainer">
           <p>Loading...</p>
         </div>
-        <div v-if="!loading" class="pokemonContainer" v-on:click="() => refetch(data?.name)">
+        <div v-if="!loading" class="pokemonContainer" v-on:click="() => refetch(data)">
           <img :src="data2?.sprites.front_default" />
           <p>{{data2?.name}}</p>
         </div>
@@ -91,7 +99,18 @@ import {ref, onMounted } from "@vue/runtime-dom";
           <p>Loading...</p>
         </div>
       </div>
-      <section><h2 v-if="lastVoted">You've voted:</h2><h2 class="voted">{{ lastVoted }}</h2></section>
+      <div v-if="lastVoted" style="display: flex;">
+        <div style="display: flex; flex-direction: column;">
+          You've voted:
+          <img :src="lastVoted.sprites.front_default" />
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          Stats:
+          <StatList :stats="lastVoted" />
+        </div>
+        <button v-on:click="nullLast" type="button">Continue</button>
+      </div>
+      <!-- <section><h2 v-if="lastVoted">You've voted:</h2><h2 class="voted">{{ lastVoted }}</h2></section> -->
   </div>
 </template>
 
