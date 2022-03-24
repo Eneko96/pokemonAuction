@@ -1,24 +1,13 @@
 <script>
-import { createApp, ref, onMounted } from "@vue/runtime-dom";
+import {ref, onMounted } from "@vue/runtime-dom";
   const randomNumber = () => {
     return Math.round(Math.random() * (155 -0) + 0)
-  }
-
-  const fetchNewData = () => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber()}`)
-      .then(res => res.json())
-      .then(res => { 
-        console.log(res)
-        return data = res
-      })
-      .catch(err => {return { error: err }})
   }
 
   export default {
     data() {
       return {
         count: 0,
-        lastVoted: null
       }
     },
     methods: {
@@ -27,9 +16,6 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
       },
       decrement() {
         this.count--
-      },
-      setVote(voted) {
-        this.lastVoted = voted
       }
     },
     setup() {
@@ -37,8 +23,11 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
       const error = ref(null)
       const data2 = ref(null)
       const error2 = ref(null)
+      const lastVoted = ref(null)
+      const loading = ref(false)
 
       function fetchData() {
+        loading.value = true
         fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber()}`)
           .then(res => res.json())
           .then(res => {
@@ -53,11 +42,12 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
             data2.value = res
           })
           .catch(err => error2.value = err)
+        loading.value = false
       }
 
-      function refetch() {
-        console.log(this.lastVoted)
-        console.log('hola bebe')
+      function refetch(last) {
+        lastVoted.value = last
+        fetchData()
       }
 
       onMounted(() => {
@@ -70,7 +60,9 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
         data,
         data2,
         error,
-        error2
+        error2,
+        lastVoted,
+        loading
       }
     },
     mounted() {
@@ -84,16 +76,22 @@ import { createApp, ref, onMounted } from "@vue/runtime-dom";
   <div class="boxContainer">
       <h1>Select one of them</h1>
       <div class="auctionContainer">
-        <div class="pokemonContainer">
-          <img :src="data?.sprites.front_default" v-on:click="refetch" />
+        <div v-if="!loading" class="pokemonContainer">
+          <img :src="data?.sprites.front_default" v-on:click="() => refetch(data?.name)" />
           <p>{{data?.name}}</p>
         </div>
-        <div class="pokemonContainer" v-on:click="fetchData">
+        <div v-else class="pokemonContainer">
+          <p>Loading...</p>
+        </div>
+        <div v-if="!loading" class="pokemonContainer" v-on:click="() => refetch(data?.name)">
           <img :src="data2?.sprites.front_default" />
           <p>{{data2?.name}}</p>
         </div>
+        <div v-else class="pokemonContainer">
+          <p>Loading...</p>
+        </div>
       </div>
-      <h2 v-if="lastVoted">You've voted {{lastVoted}}</h2>
+      <section><h2 v-if="lastVoted">You've voted:</h2><h2 class="voted">{{ lastVoted }}</h2></section>
   </div>
 </template>
 
@@ -113,10 +111,10 @@ div {
   gap: 1rem;
 }
 .pokemonContainer {
-  border-radius: 8px;
-  margin-top: 50px;
-  width: 200px;
-  height: 200px;
+  border-radius: .5rem;
+  margin-top: 2rem;
+  width: 14rem;
+  height: 14rem;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -126,7 +124,7 @@ div {
 }
 
 .pokemonContainer:hover {
-
+  box-shadow: 0 0 0 1em #cccaca;
   background-color: rgb(20, 20, 20);
 }
 
@@ -137,5 +135,15 @@ p {
 
 .auctionContainer {
   gap: 100px;
+}
+
+.voted {
+  color:rgb(20, 20, 20)
+}
+
+section {
+  display: flex;
+  gap: 1rem;
+  text-transform: uppercase;
 }
 </style>
