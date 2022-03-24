@@ -92,14 +92,16 @@ import StatList from "./StatList.vue";
           <p>Loading...</p>
         </div>
       </div>
-      <div v-if="lastVoted" style="display: flex; gap: 5rem">
-        <div style="display: flex; flex-direction: column; background-color: aliceblue; height: 100%; width: 100%; padding: 1rem; border-radius: 1rem; box-shadow: 0 0 0 .04em #cccaca;">
-          You've voted:
-          <img :src="lastVoted.sprites.front_default" />
+      <div v-if="lastVoted" class="resultContainer">
+        <div class="innerResultContainer">
+          <img :src="lastVoted.sprites.front_default" style="width: 15rem;"/>
+          <p style="text-transform: uppercase; color: black; font-weight: bold; font-size: 2rem; margin-bottom: 0;">{{lastVoted.name}}</p>
         </div>
-        <div style="display: flex; flex-direction: column; height: 100%; width: 100%; background-color: aliceblue; padding: 1rem; border-radius: 1rem; box-shadow: 0 0 0 .04em #cccaca;">
-          Stats:
-          <StatList :stats="lastVoted.stats" />
+        <div style="display: flex; flex-direction: column; height: 100%; background-color: aliceblue; padding: 1rem; border-radius: 1rem; box-shadow: 0 0 0 .04em #cccaca;  width: 20rem">
+          <p style="text-transform: uppercase; color: black; font-weight: bold; font-size: 2rem; margin: 0">STATS</p>
+          <Transition name="slide-fade">
+            <StatList :stats="lastVoted.stats" />
+          </Transition>
         </div>
       </div>
       <button v-if="lastVoted" v-on:click="nullLast" type="button">Continue</button>
@@ -159,9 +161,35 @@ section {
   text-transform: uppercase;
 }
 
+.resultContainer {
+  display: flex;
+  gap: 5rem;
+}
+
+.innerResultContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: aliceblue; 
+  height: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 0 .04em #cccaca;
+  width: 20rem
+}
+
 button {
   padding: 2rem 9rem;
   margin-top: 2rem;
   font-size: 1rem;
 }
+
+@media screen and (max-width: 400px) {
+  .auctionContainer {
+    flex-direction: column;
+  }
+  .resultContainer {
+    flex-direction: column;
+  }
+}
+
 </style>
