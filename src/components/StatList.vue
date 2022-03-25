@@ -4,11 +4,6 @@ export default {
   props: {
     stats: Array
   },
-  data() {
-    return {
-      stats: this.stats
-    }
-  }
 }
 </script>
 

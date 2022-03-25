@@ -1,5 +1,5 @@
 <script>
-import {ref, onMounted } from "@vue/runtime-dom";
+import { ref, onMounted } from "@vue/runtime-dom";
 import StatList from "./StatList.vue";
   const randomNumber = () => {
     return Math.round(Math.random() * (155 -0) + 0)
@@ -9,6 +9,7 @@ import StatList from "./StatList.vue";
     data() {
         return {
             count: 0,
+            dialog: false
         };
     },
     methods: {
@@ -17,6 +18,9 @@ import StatList from "./StatList.vue";
         },
         decrement() {
             this.count--;
+        },
+        toggleDialog() {
+          this.dialog = !this.dialog
         }
     },
     setup() {
@@ -109,18 +113,19 @@ import StatList from "./StatList.vue";
       </div>
       <div v-if="arrayVoted && !lastVoted" style="margin-top: 10rem; flex-wrap: wrap; overflow-x: auto;">
         <div v-for="pok in arrayVoted" style="display: flex; flex-direction: column;">
-          <img :src="pok.sprites.front_default" />
+          <img :src="pok.sprites.front_default" v-on:click="toggleDialog"/>
           <p style="color: black; margin: 0;">{{pok.name}}</p> 
         </div>
       </div>
       <button v-if="lastVoted" v-on:click="nullLast" type="button">Continue</button>
-      <!-- <section><h2 v-if="lastVoted">You've voted:</h2><h2 class="voted">{{ lastVoted }}</h2></section> -->
   </div>
 </template>
 
 <style scoped>
 
 .boxContainer {
+  height: 100%;
+  width: 100%;
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
@@ -200,7 +205,14 @@ button {
   .resultContainer {
     flex-direction: column;
   }
+}
 
+dialog {
+  border: none !important;
+  border-radius: calc(5px * var(--ratio));
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 1.6rem;
+  max-width: 400px;
 }
 
 </style>

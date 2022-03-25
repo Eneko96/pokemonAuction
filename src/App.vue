@@ -12,18 +12,14 @@ import TestComponent from './components/TestComponent.vue';
 <style>
 #app {
   display: flex;
+  align-items: center;
+  height: 98vh;
   justify-content: center;
-  width: 100vw;
-  height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-body {
-  overflow: hidden;
 }
 
 @media screen and (max-width: 400px) {
