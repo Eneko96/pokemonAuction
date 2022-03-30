@@ -88,15 +88,10 @@ import StatList from "./StatList.vue";
           <img :src="data?.sprites.front_default" />
           <p>{{data?.name}}</p>
         </div>
-        <div v-else class="pokemonContainer">
-          <p>Loading...</p>
-        </div>
+
         <div v-if="!loading" class="pokemonContainer" v-on:click="() => refetch(data)">
           <img :src="data2?.sprites.front_default" />
           <p>{{data2?.name}}</p>
-        </div>
-        <div v-else class="pokemonContainer">
-          <p>Loading...</p>
         </div>
       </div>
       <div v-if="lastVoted" class="resultContainer">
@@ -104,13 +99,15 @@ import StatList from "./StatList.vue";
           <img :src="lastVoted.sprites.front_default" style="width: 15rem;"/>
           <p style="text-transform: uppercase; color: black; font-weight: bold; font-size: 2rem; margin-bottom: 0;">{{lastVoted.name}}</p>
         </div>
-        <div style="display: flex; flex-direction: column; height: 100%; background-color: aliceblue; padding: 1rem; border-radius: 1rem; box-shadow: 0 0 0 .04em #cccaca;  width: 20rem">
+
+        <div class="statsContainer">
           <p style="text-transform: uppercase; color: black; font-weight: bold; font-size: 2rem; margin: 0">STATS</p>
           <Transition name="slide-fade">
             <StatList :stats="lastVoted.stats" />
           </Transition>
         </div>
       </div>
+
       <div v-if="arrayVoted && !lastVoted" style="margin-top: 10rem; flex-wrap: wrap; overflow-x: auto;">
         <div v-for="pok in arrayVoted" style="display: flex; flex-direction: column;">
           <img :src="pok.sprites.front_default" v-on:click="toggleDialog"/>
@@ -166,6 +163,34 @@ p {
   gap: 100px;
 }
 
+.shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
 .voted {
   color:rgb(20, 20, 20)
 }
@@ -177,6 +202,7 @@ section {
 }
 
 .resultContainer {
+  padding: 1rem;
   display: flex;
   gap: 5rem;
 }
@@ -207,12 +233,15 @@ button {
   }
 }
 
-dialog {
-  border: none !important;
-  border-radius: calc(5px * var(--ratio));
-  box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  padding: 1.6rem;
-  max-width: 400px;
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: aliceblue;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 0 .04em #cccaca;
+  width: 20rem;
 }
 
 </style>

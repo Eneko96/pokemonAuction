@@ -11,9 +11,9 @@ import TestComponent from './components/TestComponent.vue';
 
 <style>
 #app {
+  padding: 1rem;
   display: flex;
   align-items: center;
-  height: 98vh;
   justify-content: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
